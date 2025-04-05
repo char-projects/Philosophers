@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:29:46 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/05 18:31:50 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/05 19:20:51 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	init_philos(t_data *p)
 		p->philos[i].id = i + 1;
 		p->philos[i].meals_eaten = 0;
 		p->philos[i].last_meal = 0;
+		p->philos[i].died = 0;
 		/* Not sure about this part
 		if (i % 2 == 0)
 			p->philos[i].l_fork = &p->philos[i - 1].r_fork;

@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/05 18:33:43 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/05 20:30:54 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,53 @@ and X with the philosopher number.
 
 #include "../include/philosophers.h"
 
+void	*ft_state(void *tmp_p)
+{
+	int			i;
+	t_philos	*p;
+
+	p = (t_philos *)tmp_p;
+	(void)p;
+	i = 0;
+	ft_printf("Entering ft_state function: \n");
+	ft_printf("Philosopher ID: %d\n", p->id);
+	while (i < 3)
+	{
+		ft_take_fork(p);
+		ft_eat(p);
+		ft_sleep(p);
+		ft_think(p);
+		usleep(100);
+		if (p->died)
+			break ;
+		i++;
+	}
+	return (NULL);
+}
+
+void	start_simulation(t_data *p)
+{
+	int			i;
+	pthread_t	*thread;
+
+	thread = malloc(sizeof(pthread_t) * (p->num_philos + 1));
+	if (!thread)
+		error_msg(p, 0);
+	i = 0;
+	while (i < p->num_philos)
+	{
+		pthread_create(&thread[i], NULL, ft_state, (void *)&p->philos[i]);
+		pthread_join(thread[i], NULL);
+		ft_printf("Thread %d created\n", i);
+		i++;
+	}
+}
+
 void	only_one_philosopher(t_data *p)
 {
 	ft_printf("%d %d has taken a fork\n", 0, p->philos[0].id);
 	// I think I have to make my own usleep function
-    usleep(p->time_to_die * 1000);
+	usleep(p->time_to_die * 1000);
 	ft_printf("%d %d died\n", p->time_to_die, p->philos[0].id);
 	free_philos(p);
 	exit(0);
@@ -54,6 +96,7 @@ int	main(int argc, char **argv)
 		only_one_philosopher(p);
 	// Start the simulation
 	ft_printf("Starting simulation with %d philosophers...\n", p->num_philos);
+	start_simulation(p);
 	// Clean up and exit
 	free_philos(p);
 }

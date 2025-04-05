@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 16:04:02 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/05 18:08:10 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/05 20:01:18 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	error_msg(t_data *p, int error_code)
 		ft_printf("Error: Invalid argument values\n");
 	else if (error_code == 3)
 		ft_printf("Error: Mutex initialization failed\n");
+	else if (error_code == 4)
+		ft_printf("Error: Thread creation failed\n");
 	free_philos(p);
 	exit(1);
 }
