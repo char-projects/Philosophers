@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 13:45:51 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/06 14:04:32 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ void	*ft_state(void *tmp_p)
 		ft_think(p);
 		ft_eat(p);
 		if (p->died)
-			break ;
+		{
+			ft_die(p);
+			return (NULL);
+		}
 		i++;
 	}
 	return (NULL);
@@ -66,10 +69,9 @@ void	start_simulation(t_data *p)
 
 void	only_one_philosopher(t_data *p)
 {
-	ft_printf("%d %d has taken a fork\n", 0, p->philos[0].id);
-	// I think I have to make my own usleep function
+	msg_lock(&p->philos[0], 0);
 	ft_usleep(p->time_to_die);
-	ft_printf("%d %d died\n", p->time_to_die, p->philos[0].id);
+	msg_lock(&p->philos[0], 4);
 	free_philos(p);
 	exit(0);
 }

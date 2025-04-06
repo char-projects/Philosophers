@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:44 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 13:40:28 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/06 14:03:11 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_data
 	int				dead; // Initialized
 
 	int				num_philos; // Initialized
-	int				time_to_die; // Initialized
+	size_t			time_to_die; // Initialized
 	int				time_to_eat; // Initialized
 	int				time_to_sleep; // Initialized
 	int				num_to_eat; // Initialized
@@ -68,6 +68,9 @@ void				ft_die(t_philos *p);
 void				*ft_state(void *tmp_p);
 void				start_simulation(t_data *p);
 void				only_one_philosopher(t_data *p);
+
+// monitor.c
+int					check_death(t_philos *p);
 
 // utils.c
 void				msg_lock(t_philos *p, int code);
