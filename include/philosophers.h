@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:44 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 04:02:52 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/06 13:40:28 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void				start_simulation(t_data *p);
 void				only_one_philosopher(t_data *p);
 
 // utils.c
+void				msg_lock(t_philos *p, int code);
 void				ft_usleep(int ms);
 size_t				current_time(void);
 

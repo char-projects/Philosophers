@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:29:46 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 03:59:23 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/06 13:45:18 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	init_philos(t_data *p)
 		p->philos[i].l_fork = &p->forks[i];
 		ft_printf("Philosopher %d has left fork %d\n", p->philos[i].id, i);
 		p->philos[i].r_fork = &p->forks[(i + 1) % p->num_philos];
-		ft_printf("Philosopher %d has right fork %d\n", p->philos[i].id, (i + 1) % p->num_philos);
+		if (p->num_philos > 1)
+			ft_printf("Philosopher %d has right fork %d\n", p->philos[i].id, (i + 1) % p->num_philos);
 		i++;
 	}
 }

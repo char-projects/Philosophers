@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 04:21:43 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/06 13:45:51 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,6 @@ void	*ft_state(void *tmp_p)
 
 	p = (t_philos *)tmp_p;
 	i = 0;
-	if (p->id % 2 == 0)
-		usleep(100);
-	else
-		usleep(50);
 	while (i < 2)
 	{
 		ft_sleep(p);
@@ -58,6 +54,11 @@ void	start_simulation(t_data *p)
 	while (i < p->num_philos)
 	{
 		pthread_create(&thread[i], NULL, ft_state, (void *)&p->philos[i]);
+		i++;
+	}
+	i = 0;
+	while (i < p->num_philos)
+	{
 		pthread_join(thread[i], NULL);
 		i++;
 	}
