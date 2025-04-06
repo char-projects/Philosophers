@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:29:46 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/05 19:20:51 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/06 03:59:23 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	init_philos(t_data *p)
 	int	i;
 
 	i = 0;
-	p->philos = malloc(sizeof(t_philos) * (p->num_philos + 1));
+	p->philos = malloc(sizeof(t_philos) * p->num_philos);
 	if (!p->philos)
 		error_msg(p, 0);
 	while (i < p->num_philos)
@@ -42,12 +42,18 @@ void	init_philos(t_data *p)
 		p->philos[i].meals_eaten = 0;
 		p->philos[i].last_meal = 0;
 		p->philos[i].died = 0;
-		/* Not sure about this part
-		if (i % 2 == 0)
-			p->philos[i].l_fork = &p->philos[i - 1].r_fork;
-		else
-			p->philos[i].l_fork = &p->philos[i + 1].r_fork;
-		*/
+		p->philos[i].meal_lock = malloc(sizeof(pthread_mutex_t));
+		p->philos[i].dead_lock = malloc(sizeof(pthread_mutex_t));
+		p->philos[i].write_lock = malloc(sizeof(pthread_mutex_t));
+		if (!p->philos[i].meal_lock || !p->philos[i].dead_lock || !p->philos[i].write_lock)
+			error_msg(p, 0);
+		pthread_mutex_init(p->philos[i].meal_lock, NULL);
+		pthread_mutex_init(p->philos[i].dead_lock, NULL);
+		pthread_mutex_init(p->philos[i].write_lock, NULL);
+		p->philos[i].l_fork = &p->forks[i];
+		ft_printf("Philosopher %d has left fork %d\n", p->philos[i].id, i);
+		p->philos[i].r_fork = &p->forks[(i + 1) % p->num_philos];
+		ft_printf("Philosopher %d has right fork %d\n", p->philos[i].id, (i + 1) % p->num_philos);
 		i++;
 	}
 }
@@ -56,14 +62,13 @@ void	init_forks(t_data *p)
 {
 	int	i;
 
-	i = 0;
-	p->forks = malloc(sizeof(pthread_mutex_t) * (p->num_philos));
+	p->forks = malloc(sizeof(pthread_mutex_t) * p->num_philos);
 	if (!p->forks)
-		error_msg(p, 0);
+	error_msg(p, 0);
+	i = 0;
 	while (i < p->num_philos)
 	{
-		if (pthread_mutex_init(&p->forks[i], NULL) != 0)
-			error_msg(p, 3);
+		pthread_mutex_init(&p->forks[i], NULL);
 		i++;
 	}
 }

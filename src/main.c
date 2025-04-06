@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/05 20:30:54 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/06 04:21:43 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,16 @@ void	*ft_state(void *tmp_p)
 	t_philos	*p;
 
 	p = (t_philos *)tmp_p;
-	(void)p;
 	i = 0;
-	ft_printf("Entering ft_state function: \n");
-	ft_printf("Philosopher ID: %d\n", p->id);
-	while (i < 3)
+	if (p->id % 2 == 0)
+		usleep(100);
+	else
+		usleep(50);
+	while (i < 2)
 	{
-		ft_take_fork(p);
-		ft_eat(p);
 		ft_sleep(p);
 		ft_think(p);
-		usleep(100);
+		ft_eat(p);
 		if (p->died)
 			break ;
 		i++;
@@ -60,7 +59,6 @@ void	start_simulation(t_data *p)
 	{
 		pthread_create(&thread[i], NULL, ft_state, (void *)&p->philos[i]);
 		pthread_join(thread[i], NULL);
-		ft_printf("Thread %d created\n", i);
 		i++;
 	}
 }
@@ -69,7 +67,7 @@ void	only_one_philosopher(t_data *p)
 {
 	ft_printf("%d %d has taken a fork\n", 0, p->philos[0].id);
 	// I think I have to make my own usleep function
-	usleep(p->time_to_die * 1000);
+	ft_usleep(p->time_to_die);
 	ft_printf("%d %d died\n", p->time_to_die, p->philos[0].id);
 	free_philos(p);
 	exit(0);
@@ -78,7 +76,7 @@ void	only_one_philosopher(t_data *p)
 // Arguments in milliseconds
 int	main(int argc, char **argv)
 {
-	t_data	*p;
+	t_data		*p;
 
 	// Allocate memory for philosophers
 	p = malloc(sizeof(t_philos) * (ft_atoi(argv[1])));
@@ -89,13 +87,12 @@ int	main(int argc, char **argv)
 		error_msg(p, 1);
 	// Initialize everything
 	init_argv(argc, argv, p);
-	init_philos(p);
 	init_forks(p);
+	init_philos(p);
 	// Handle the case of only one philosopher
 	if (p->num_philos == 1)
 		only_one_philosopher(p);
 	// Start the simulation
-	ft_printf("Starting simulation with %d philosophers...\n", p->num_philos);
 	start_simulation(p);
 	// Clean up and exit
 	free_philos(p);

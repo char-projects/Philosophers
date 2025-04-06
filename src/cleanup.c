@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 16:04:02 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/05 20:01:18 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/06 02:56:08 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,5 @@ void	error_msg(t_data *p, int error_code)
 void	free_philos(t_data *p)
 {
 	free(p->philos);
-	free(p->forks);
 	free(p);
 }

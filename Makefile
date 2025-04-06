@@ -13,6 +13,7 @@ SRC						=	$(SRC_DIR)/cleanup.c  \
 							$(SRC_DIR)/init.c     \
 							$(SRC_DIR)/logs.c	  \
 							$(SRC_DIR)/main.c     \
+							$(SRC_DIR)/utils.c    \
 
 TOTAL_SRC_FILES			:=	$(words $(SRC))
 
