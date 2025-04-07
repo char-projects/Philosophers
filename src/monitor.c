@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:56:43 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/08 00:58:03 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/08 01:28:09 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	check_death(t_philos *p)
 {
 	pthread_mutex_lock(p->meal_lock);
-	if (current_time() - p->last_meal > p->data->time_to_die)
+	if (current_time(1) - p->last_meal > p->data->time_to_die)
 	{
 		pthread_mutex_unlock(p->meal_lock);
 		pthread_mutex_lock(p->dead_lock);
@@ -41,10 +41,7 @@ int	check_meals(t_philos *p)
 	{
 		pthread_mutex_lock(p[i].meal_lock);
 		if (p[i].meals_eaten >= p[0].data->num_to_eat)
-		{
-			msg_lock(p, 5);
 			done++;
-		}
 		pthread_mutex_unlock(p[i].meal_lock);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:44 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/08 01:00:01 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/08 01:17:54 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_philos
 {
 	int				id; // Initialized
 	int				meals_eaten; // Initialized
-	int				last_meal; // Change to size_t !!
+	size_t			last_meal; // Initialized
 
 	pthread_mutex_t	*l_fork; // Initialized
 	pthread_mutex_t	*r_fork; // Initialized
@@ -76,7 +76,7 @@ void				*monitor(void *tmp_p);
 
 // utils.c
 void				msg_lock(t_philos *p, int code);
-void				ft_usleep(int ms);
-size_t				current_time(void);
+void				ft_usleep(size_t ms);
+size_t				current_time(int flag);
 
 #endif

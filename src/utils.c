@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 01:03:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/07 23:55:32 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/08 01:27:58 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,35 @@ void	msg_lock(t_philos *p, int code)
 		str = "is thinking";
 	else if (code == 4)
 		str = "died";
-	else if (code == 5)
-		str = "has finished all meals";
 	else
 		return ;
 	pthread_mutex_lock(p->write_lock);
-	printf("%zu %d %s\n", current_time(), p->id, str);
+	printf("%zu %d %s\n", current_time(1), p->id, str);
 	pthread_mutex_unlock(p->write_lock);
 }
 
-void	ft_usleep(int ms)
+void	ft_usleep(size_t ms)
 {
 	size_t	start;
-	size_t  time;
-
-	time = (size_t)ms;
-	start = current_time();
-	while ((current_time() - start) < time)
+	
+	start = current_time(1);
+	while ((current_time(1) - start) < ms)
 		usleep(500);
 }
 
-size_t	current_time(void)
+size_t	current_time(int flag)
 {
 	struct timeval			time;
+	static struct timeval			start;
 
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	if (flag == 0)
+	{
+		gettimeofday(&start, NULL);
+		return (0);
+	}
+	else
+	{
+		gettimeofday(&time, NULL);
+		return ((time.tv_sec - start.tv_sec) * 1000 + (time.tv_usec - start.tv_usec) / 1000);
+	}
 }

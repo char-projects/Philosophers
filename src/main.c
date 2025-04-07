@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/08 01:01:56 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/08 01:26:39 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	*ft_state(void *tmp_p)
             break;
         }
         pthread_mutex_unlock(p->dead_lock);
+		ft_eat(p);
 		ft_sleep(p);
 		ft_think(p);
-		ft_eat(p);
 		i++;
 	}
 	return (NULL);
@@ -85,6 +85,7 @@ int	main(int argc, char **argv)
 {
 	t_data		*p;
 
+	current_time(0);
 	p = malloc(sizeof(t_data));
 	if (!p)
 		error_msg(p, 0);
