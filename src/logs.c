@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:35:18 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 13:50:52 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/08 00:53:26 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,5 @@ void    ft_think(t_philos *p)
 void    ft_die(t_philos *p)
 {
     msg_lock(p, 4);
-    // Implement the logic for dying here
+    p->data->dead = 1;
 }

@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:29:46 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 13:45:18 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/08 00:15:51 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	init_philos(t_data *p)
 		p->philos[i].meals_eaten = 0;
 		p->philos[i].last_meal = 0;
 		p->philos[i].died = 0;
+		p->philos[i].data = p;
 		p->philos[i].meal_lock = malloc(sizeof(pthread_mutex_t));
 		p->philos[i].dead_lock = malloc(sizeof(pthread_mutex_t));
 		p->philos[i].write_lock = malloc(sizeof(pthread_mutex_t));
@@ -50,11 +51,22 @@ void	init_philos(t_data *p)
 		pthread_mutex_init(p->philos[i].meal_lock, NULL);
 		pthread_mutex_init(p->philos[i].dead_lock, NULL);
 		pthread_mutex_init(p->philos[i].write_lock, NULL);
-		p->philos[i].l_fork = &p->forks[i];
-		ft_printf("Philosopher %d has left fork %d\n", p->philos[i].id, i);
-		p->philos[i].r_fork = &p->forks[(i + 1) % p->num_philos];
-		if (p->num_philos > 1)
-			ft_printf("Philosopher %d has right fork %d\n", p->philos[i].id, (i + 1) % p->num_philos);
+		if (i % 2 == 0)
+		{
+			p->philos[i].l_fork = &p->forks[i];
+			ft_printf("Philosopher %d has left fork %d\n", p->philos[i].id, i);
+			p->philos[i].r_fork = &p->forks[(i + 1) % p->num_philos];
+			if (p->num_philos > 1)
+				ft_printf("Philosopher %d has right fork %d\n", p->philos[i].id, (i + 1) % p->num_philos);
+		}
+		else
+		{
+			p->philos[i].l_fork = &p->forks[(i + 1) % p->num_philos];
+			ft_printf("Philosopher %d has left fork %d\n", p->philos[i].id, (i + 1) % p->num_philos);
+			p->philos[i].r_fork = &p->forks[i];
+			if (p->num_philos > 1)
+				ft_printf("Philosopher %d has right fork %d\n", p->philos[i].id, i);
+		}
 		i++;
 	}
 }

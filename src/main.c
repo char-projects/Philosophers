@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 14:04:32 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/08 01:01:56 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,16 @@ void	*ft_state(void *tmp_p)
 	i = 0;
 	while (i < 2)
 	{
+		pthread_mutex_lock(p->dead_lock);
+        if (p->data->dead)
+        {
+            pthread_mutex_unlock(p->dead_lock);
+            break;
+        }
+        pthread_mutex_unlock(p->dead_lock);
 		ft_sleep(p);
 		ft_think(p);
 		ft_eat(p);
-		if (p->died)
-		{
-			ft_die(p);
-			return (NULL);
-		}
 		i++;
 	}
 	return (NULL);
@@ -59,12 +61,14 @@ void	start_simulation(t_data *p)
 		pthread_create(&thread[i], NULL, ft_state, (void *)&p->philos[i]);
 		i++;
 	}
+	pthread_create(&thread[i], NULL, monitor, (void *)p);
 	i = 0;
-	while (i < p->num_philos)
+	while (i <= p->num_philos)
 	{
 		pthread_join(thread[i], NULL);
 		i++;
 	}
+	free(thread);
 }
 
 void	only_one_philosopher(t_data *p)
@@ -81,22 +85,16 @@ int	main(int argc, char **argv)
 {
 	t_data		*p;
 
-	// Allocate memory for philosophers
-	p = malloc(sizeof(t_philos) * (ft_atoi(argv[1])));
+	p = malloc(sizeof(t_data));
 	if (!p)
 		error_msg(p, 0);
-	// Check the number of arguments
 	if (argc != 5 && argc != 6)
 		error_msg(p, 1);
-	// Initialize everything
 	init_argv(argc, argv, p);
 	init_forks(p);
 	init_philos(p);
-	// Handle the case of only one philosopher
 	if (p->num_philos == 1)
 		only_one_philosopher(p);
-	// Start the simulation
 	start_simulation(p);
-	// Clean up and exit
 	free_philos(p);
 }

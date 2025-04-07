@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:44 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/06 14:03:11 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/08 01:00:01 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_philos
 {
 	int				id; // Initialized
 	int				meals_eaten; // Initialized
-	int				last_meal; // Initialized
+	int				last_meal; // Change to size_t !!
 
 	pthread_mutex_t	*l_fork; // Initialized
 	pthread_mutex_t	*r_fork; // Initialized
@@ -71,6 +71,8 @@ void				only_one_philosopher(t_data *p);
 
 // monitor.c
 int					check_death(t_philos *p);
+int					check_meals(t_philos *p);
+void				*monitor(void *tmp_p);
 
 // utils.c
 void				msg_lock(t_philos *p, int code);
