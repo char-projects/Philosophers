@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:44 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/08 01:17:54 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/09 02:37:24 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,33 +19,27 @@
 
 typedef struct s_data
 {
-	int				dead; // Initialized
-
-	int				num_philos; // Initialized
-	size_t			time_to_die; // Initialized
-	int				time_to_eat; // Initialized
-	int				time_to_sleep; // Initialized
-	int				num_to_eat; // Initialized
-
-	pthread_mutex_t *forks; // Initialized
+	int				dead;
+	int				num_philos;
+	size_t			time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				num_to_eat;
+	pthread_t		*thread;
+	pthread_mutex_t	*forks;
 	struct s_philos	*philos;
 }					t_data;
 
 typedef struct s_philos
 {
-	int				id; // Initialized
-	int				meals_eaten; // Initialized
-	size_t			last_meal; // Initialized
-
-	pthread_mutex_t	*l_fork; // Initialized
-	pthread_mutex_t	*r_fork; // Initialized
-
-	int				died; // Initialized
-
+	int				id;
+	int				meals_eaten;
+	size_t			last_meal;
+	pthread_mutex_t	*l_fork;
+	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*meal_lock;
 	pthread_mutex_t	*dead_lock;
 	pthread_mutex_t	*write_lock;
-
 	t_data			*data;
 }					t_philos;
 
@@ -61,10 +55,9 @@ void				init_forks(t_data *p);
 // logs.c
 void				ft_eat(t_philos *p);
 void				ft_sleep(t_philos *p);
-void				ft_think(t_philos *p);
-void				ft_die(t_philos *p);
 
 // main.c
+int					ft_is_dead(t_philos *p);
 void				*ft_state(void *tmp_p);
 void				start_simulation(t_data *p);
 void				only_one_philosopher(t_data *p);

@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 01:03:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/08 01:27:58 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:55:27 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	msg_lock(t_philos *p, int code)
 		str = "is thinking";
 	else if (code == 4)
 		str = "died";
+	else if (code == 5)
+		str = "is dead in main";
 	else
 		return ;
 	pthread_mutex_lock(p->write_lock);

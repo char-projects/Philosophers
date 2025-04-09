@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:29:46 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/08 00:15:51 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/09 01:39:34 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ void	init_argv(int argc, char **argv, t_data *p)
 	if (argc == 6)
 		p->num_to_eat = ft_atoi(argv[5]);
 	else
-		p->num_to_eat = -1; // No limit on eating
+		p->num_to_eat = -1;
 	p->dead = 0;
-	if (p->num_philos <= 0 || p->time_to_die <= 0 || p->time_to_eat <= 0
-		|| p->time_to_sleep <= 0 || (argc == 6 && p->num_to_eat <= 0))
+	if (p->num_philos <= 0 || p->num_philos > 200 || p->time_to_die <= 0
+		|| p->time_to_eat <= 0 || p->time_to_sleep <= 0 || (argc == 6
+			&& p->num_to_eat <= 0))
 		error_msg(p, 2);
 }
 
@@ -40,13 +41,13 @@ void	init_philos(t_data *p)
 	{
 		p->philos[i].id = i + 1;
 		p->philos[i].meals_eaten = 0;
-		p->philos[i].last_meal = 0;
-		p->philos[i].died = 0;
+		p->philos[i].last_meal = current_time(1);
 		p->philos[i].data = p;
 		p->philos[i].meal_lock = malloc(sizeof(pthread_mutex_t));
 		p->philos[i].dead_lock = malloc(sizeof(pthread_mutex_t));
 		p->philos[i].write_lock = malloc(sizeof(pthread_mutex_t));
-		if (!p->philos[i].meal_lock || !p->philos[i].dead_lock || !p->philos[i].write_lock)
+		if (!p->philos[i].meal_lock || !p->philos[i].dead_lock
+			|| !p->philos[i].write_lock)
 			error_msg(p, 0);
 		pthread_mutex_init(p->philos[i].meal_lock, NULL);
 		pthread_mutex_init(p->philos[i].dead_lock, NULL);
@@ -54,18 +55,12 @@ void	init_philos(t_data *p)
 		if (i % 2 == 0)
 		{
 			p->philos[i].l_fork = &p->forks[i];
-			ft_printf("Philosopher %d has left fork %d\n", p->philos[i].id, i);
 			p->philos[i].r_fork = &p->forks[(i + 1) % p->num_philos];
-			if (p->num_philos > 1)
-				ft_printf("Philosopher %d has right fork %d\n", p->philos[i].id, (i + 1) % p->num_philos);
 		}
 		else
 		{
 			p->philos[i].l_fork = &p->forks[(i + 1) % p->num_philos];
-			ft_printf("Philosopher %d has left fork %d\n", p->philos[i].id, (i + 1) % p->num_philos);
 			p->philos[i].r_fork = &p->forks[i];
-			if (p->num_philos > 1)
-				ft_printf("Philosopher %d has right fork %d\n", p->philos[i].id, i);
 		}
 		i++;
 	}
@@ -77,7 +72,7 @@ void	init_forks(t_data *p)
 
 	p->forks = malloc(sizeof(pthread_mutex_t) * p->num_philos);
 	if (!p->forks)
-	error_msg(p, 0);
+		error_msg(p, 0);
 	i = 0;
 	while (i < p->num_philos)
 	{

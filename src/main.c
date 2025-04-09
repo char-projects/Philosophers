@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/08 01:26:39 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/09 02:38:04 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,31 @@ and X with the philosopher number.
 
 #include "../include/philosophers.h"
 
+int	ft_is_dead(t_philos *p)
+{
+	int death;
+	
+	death = 0;
+	pthread_mutex_lock(p->dead_lock);
+	if (p->data->dead == 1)
+		death = p->data->dead;
+	pthread_mutex_unlock(p->dead_lock);
+	return (death);
+}
+
 void	*ft_state(void *tmp_p)
 {
-	int			i;
 	t_philos	*p;
 
 	p = (t_philos *)tmp_p;
-	i = 0;
-	while (i < 2)
+	while (!ft_is_dead(p))
 	{
-		pthread_mutex_lock(p->dead_lock);
-        if (p->data->dead)
-        {
-            pthread_mutex_unlock(p->dead_lock);
-            break;
-        }
-        pthread_mutex_unlock(p->dead_lock);
-		ft_eat(p);
-		ft_sleep(p);
-		ft_think(p);
-		i++;
+		if (!ft_is_dead(p))
+			ft_eat(p);
+		if (!ft_is_dead(p))
+			ft_sleep(p);
+		if (!ft_is_dead(p))
+			msg_lock(p, 3);
 	}
 	return (NULL);
 }
@@ -50,25 +55,27 @@ void	*ft_state(void *tmp_p)
 void	start_simulation(t_data *p)
 {
 	int			i;
-	pthread_t	*thread;
+	pthread_t	monitor_thread;
 
-	thread = malloc(sizeof(pthread_t) * (p->num_philos + 1));
-	if (!thread)
+	p->thread = malloc(sizeof(pthread_t) * p->num_philos);
+	if (!p->thread)
 		error_msg(p, 0);
+	if (pthread_create(&monitor_thread, NULL, monitor, (void *)p))
+		error_msg(p, 4);
 	i = 0;
 	while (i < p->num_philos)
 	{
-		pthread_create(&thread[i], NULL, ft_state, (void *)&p->philos[i]);
+		if (pthread_create(&p->thread[i], NULL, ft_state, (void *)&p->philos[i]))
+			error_msg(p, 4);
 		i++;
 	}
-	pthread_create(&thread[i], NULL, monitor, (void *)p);
 	i = 0;
-	while (i <= p->num_philos)
+	pthread_join(monitor_thread, NULL);
+	while (i < p->num_philos)
 	{
-		pthread_join(thread[i], NULL);
+		pthread_join(p->thread[i], NULL);
 		i++;
 	}
-	free(thread);
 }
 
 void	only_one_philosopher(t_data *p)
@@ -83,7 +90,7 @@ void	only_one_philosopher(t_data *p)
 // Arguments in milliseconds
 int	main(int argc, char **argv)
 {
-	t_data		*p;
+	t_data	*p;
 
 	current_time(0);
 	p = malloc(sizeof(t_data));
