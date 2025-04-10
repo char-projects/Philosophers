@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:44 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/09 02:37:24 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:26:23 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 typedef struct s_data
 {
-	int				dead;
 	int				num_philos;
 	size_t			time_to_die;
 	int				time_to_eat;
@@ -40,6 +39,7 @@ typedef struct s_philos
 	pthread_mutex_t	*meal_lock;
 	pthread_mutex_t	*dead_lock;
 	pthread_mutex_t	*write_lock;
+	int				dead;
 	t_data			*data;
 }					t_philos;
 
@@ -49,27 +49,27 @@ void				free_philos(t_data *p);
 
 // init.c
 void				init_argv(int argc, char **argv, t_data *p);
-void				init_philos(t_data *p);
 void				init_forks(t_data *p);
-
-// logs.c
-void				ft_eat(t_philos *p);
-void				ft_sleep(t_philos *p);
+void				init_philos(t_data *p);
+void				distribute_forks(t_data *p);
 
 // main.c
-int					ft_is_dead(t_philos *p);
 void				*ft_state(void *tmp_p);
 void				start_simulation(t_data *p);
 void				only_one_philosopher(t_data *p);
 
 // monitor.c
-int					check_death(t_philos *p);
-int					check_meals(t_philos *p);
+int					check_death(t_philos *p, t_data *data);
+int					ft_is_dead(t_philos *p);
+void				kill_all(t_data *p);
+int					check_meals(t_data *p);
 void				*monitor(void *tmp_p);
 
 // utils.c
 void				msg_lock(t_philos *p, int code);
+void				meals_done(t_data *p);
 void				ft_usleep(size_t ms);
 size_t				current_time(int flag);
+void				ft_eat(t_philos *p);
 
 #endif

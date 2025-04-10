@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 16:04:02 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/09 02:40:32 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:24:17 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ void	free_philos(t_data *p)
 	i = 0;
 	while (i < p->num_philos)
 	{
-		pthread_mutex_unlock(p->philos[i].l_fork);
-		pthread_mutex_unlock(p->philos[i].r_fork);
 		pthread_mutex_destroy(&p->forks[i]);
 		pthread_mutex_destroy(p->philos[i].write_lock);
 		pthread_mutex_destroy(p->philos[i].meal_lock);

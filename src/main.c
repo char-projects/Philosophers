@@ -6,48 +6,36 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/09 02:38:04 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:34:13 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-Any state change of a philosopher must be formatted as follows:
-◦ timestamp_in_ms X has taken a fork
-◦ timestamp_in_ms X is eating
-◦ timestamp_in_ms X is sleeping
-◦ timestamp_in_ms X is thinking
-◦ timestamp_in_ms X died
-Replace timestamp_in_ms with the current timestamp in milliseconds
-and X with the philosopher number.
-*/
+// Run with valgrind --tool=drd to check for data races
 
 #include "../include/philosophers.h"
-
-int	ft_is_dead(t_philos *p)
-{
-	int death;
-	
-	death = 0;
-	pthread_mutex_lock(p->dead_lock);
-	if (p->data->dead == 1)
-		death = p->data->dead;
-	pthread_mutex_unlock(p->dead_lock);
-	return (death);
-}
 
 void	*ft_state(void *tmp_p)
 {
 	t_philos	*p;
 
 	p = (t_philos *)tmp_p;
-	while (!ft_is_dead(p))
+	while (1)
 	{
 		if (!ft_is_dead(p))
 			ft_eat(p);
+		else
+			break ;
 		if (!ft_is_dead(p))
-			ft_sleep(p);
+		{
+			msg_lock(p, 2);
+			ft_usleep(p->data->time_to_sleep);
+		}
+		else
+			break ;
 		if (!ft_is_dead(p))
 			msg_lock(p, 3);
+		else
+			break ;
 	}
 	return (NULL);
 }
@@ -65,7 +53,8 @@ void	start_simulation(t_data *p)
 	i = 0;
 	while (i < p->num_philos)
 	{
-		if (pthread_create(&p->thread[i], NULL, ft_state, (void *)&p->philos[i]))
+		if (pthread_create(&p->thread[i], NULL, ft_state,
+				(void *)&p->philos[i]))
 			error_msg(p, 4);
 		i++;
 	}
@@ -87,7 +76,6 @@ void	only_one_philosopher(t_data *p)
 	exit(0);
 }
 
-// Arguments in milliseconds
 int	main(int argc, char **argv)
 {
 	t_data	*p;
@@ -101,6 +89,7 @@ int	main(int argc, char **argv)
 	init_argv(argc, argv, p);
 	init_forks(p);
 	init_philos(p);
+	distribute_forks(p);
 	if (p->num_philos == 1)
 		only_one_philosopher(p);
 	start_simulation(p);

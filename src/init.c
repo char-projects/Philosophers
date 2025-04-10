@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:29:46 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/09 01:39:34 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:37:52 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 void	init_argv(int argc, char **argv, t_data *p)
 {
-	p->num_philos = ft_atoi(argv[1]);
+	int	num_philos;
+
+	num_philos = ft_atoi(argv[1]);
+	if (num_philos <= 0 || num_philos > 200)
+		error_msg(p, 2);
+	p->num_philos = num_philos;
 	p->time_to_die = ft_atoi(argv[2]);
 	p->time_to_eat = ft_atoi(argv[3]);
 	p->time_to_sleep = ft_atoi(argv[4]);
@@ -22,11 +27,24 @@ void	init_argv(int argc, char **argv, t_data *p)
 		p->num_to_eat = ft_atoi(argv[5]);
 	else
 		p->num_to_eat = -1;
-	p->dead = 0;
-	if (p->num_philos <= 0 || p->num_philos > 200 || p->time_to_die <= 0
-		|| p->time_to_eat <= 0 || p->time_to_sleep <= 0 || (argc == 6
-			&& p->num_to_eat <= 0))
+	if (p->time_to_die <= 0 || p->time_to_eat <= 0 || p->time_to_sleep <= 0
+		|| (argc == 6 && p->num_to_eat <= 0))
 		error_msg(p, 2);
+}
+
+void	init_forks(t_data *p)
+{
+	int	i;
+
+	p->forks = malloc(sizeof(pthread_mutex_t) * p->num_philos);
+	if (!p->forks)
+		error_msg(p, 0);
+	i = 0;
+	while (i < p->num_philos)
+	{
+		pthread_mutex_init(&p->forks[i], NULL);
+		i++;
+	}
 }
 
 void	init_philos(t_data *p)
@@ -43,6 +61,7 @@ void	init_philos(t_data *p)
 		p->philos[i].meals_eaten = 0;
 		p->philos[i].last_meal = current_time(1);
 		p->philos[i].data = p;
+		p->philos[i].dead = 0;
 		p->philos[i].meal_lock = malloc(sizeof(pthread_mutex_t));
 		p->philos[i].dead_lock = malloc(sizeof(pthread_mutex_t));
 		p->philos[i].write_lock = malloc(sizeof(pthread_mutex_t));
@@ -52,6 +71,17 @@ void	init_philos(t_data *p)
 		pthread_mutex_init(p->philos[i].meal_lock, NULL);
 		pthread_mutex_init(p->philos[i].dead_lock, NULL);
 		pthread_mutex_init(p->philos[i].write_lock, NULL);
+		i++;
+	}
+}
+
+void	distribute_forks(t_data *p)
+{
+	int	i;
+
+	i = 0;
+	while (i < p->num_philos)
+	{
 		if (i % 2 == 0)
 		{
 			p->philos[i].l_fork = &p->forks[i];
@@ -62,21 +92,6 @@ void	init_philos(t_data *p)
 			p->philos[i].l_fork = &p->forks[(i + 1) % p->num_philos];
 			p->philos[i].r_fork = &p->forks[i];
 		}
-		i++;
-	}
-}
-
-void	init_forks(t_data *p)
-{
-	int	i;
-
-	p->forks = malloc(sizeof(pthread_mutex_t) * p->num_philos);
-	if (!p->forks)
-		error_msg(p, 0);
-	i = 0;
-	while (i < p->num_philos)
-	{
-		pthread_mutex_init(&p->forks[i], NULL);
 		i++;
 	}
 }
