@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:29:46 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 18:37:52 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 20:35:24 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,22 @@
 
 void	init_argv(int argc, char **argv, t_data *p)
 {
-	int	num_philos;
+	int	i;
+	int	num;
 
-	num_philos = ft_atoi(argv[1]);
-	if (num_philos <= 0 || num_philos > 200)
-		error_msg(p, 2);
-	p->num_philos = num_philos;
+	i = 0;
+	num = 0;
+	while (++i < argc)
+	{
+		num = ft_atoi(argv[i]);
+		if (i == 1 && (num < 1 || num > 200))
+			error_msg(p, 2);
+		else if (i == 5 && (num < 0 || num > INT_MAX))
+			error_msg(p, 2);
+		else if (i != 1 && i != 5 && (num < 1 || num > INT_MAX))
+			error_msg(p, 2);
+	}
+	p->num_philos = ft_atoi(argv[1]);
 	p->time_to_die = ft_atoi(argv[2]);
 	p->time_to_eat = ft_atoi(argv[3]);
 	p->time_to_sleep = ft_atoi(argv[4]);
@@ -27,9 +37,6 @@ void	init_argv(int argc, char **argv, t_data *p)
 		p->num_to_eat = ft_atoi(argv[5]);
 	else
 		p->num_to_eat = -1;
-	if (p->time_to_die <= 0 || p->time_to_eat <= 0 || p->time_to_sleep <= 0
-		|| (argc == 6 && p->num_to_eat <= 0))
-		error_msg(p, 2);
 }
 
 void	init_forks(t_data *p)

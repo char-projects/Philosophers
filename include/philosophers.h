@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:44 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 18:26:23 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 20:33:06 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHILOSOPHERS_H
 
 # include "../libft/include/libft.h"
+# include <limits.h>
 # include <pthread.h>
 # include <sys/time.h>
 
@@ -67,9 +68,9 @@ void				*monitor(void *tmp_p);
 
 // utils.c
 void				msg_lock(t_philos *p, int code);
-void				meals_done(t_data *p);
 void				ft_usleep(size_t ms);
 size_t				current_time(int flag);
 void				ft_eat(t_philos *p);
+int					arg_check(char **argv);
 
 #endif

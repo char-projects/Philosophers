@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:56:43 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 19:06:52 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 20:00:36 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void	*monitor(void *tmp_p)
 		if (check_meals(p))
 		{
 			kill_all(p);
-			// meals_done(p);
 			return (NULL);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 18:34:13 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 20:36:33 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int	main(int argc, char **argv)
 		error_msg(p, 0);
 	if (argc != 5 && argc != 6)
 		error_msg(p, 1);
+	if (arg_check(argv))
+		error_msg(p, 2);
 	init_argv(argc, argv, p);
 	init_forks(p);
 	init_philos(p);

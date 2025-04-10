@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 01:03:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 18:25:34 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/10 20:34:27 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,6 @@ void	msg_lock(t_philos *p, int code)
 	pthread_mutex_lock(p->write_lock);
 	printf("%zu %d %s\n", current_time(1), p->id, str);
 	pthread_mutex_unlock(p->write_lock);
-}
-
-void	meals_done(t_data *p)
-{
-	pthread_mutex_lock(p->philos[0].write_lock);
-	ft_printf("All philosophers have finished their meals\n");
-	pthread_mutex_unlock(p->philos[0].write_lock);
 }
 
 void	ft_usleep(size_t ms)
@@ -96,4 +89,24 @@ void	ft_eat(t_philos *p)
 		pthread_mutex_unlock(p->l_fork);
 		pthread_mutex_unlock(p->r_fork);
 	}
+}
+
+int	arg_check(char **argv)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (argv[i])
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
 }
