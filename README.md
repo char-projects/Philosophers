@@ -1,4 +1,10 @@
-# The Dining Philosophers Problem
+<div align="center">
+  <a href="https://github.com/char-projects/Philosophers">
+  <img src="logo.png" alt="Logo" width="80" height="80">
+  </a>
+  <h1>The Dining Philosophers Problem</h1>
+</div>
+
 The project explores concurrent programming and shared memory synchronization with threads and mutexes, processes and semaphores. It's designed around Edsger Dijkstra's famous problem, originally formulated in 1965, that is stated as follows:
 
 ```
