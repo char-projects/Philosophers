@@ -42,3 +42,5 @@ timestamp_in_ms X is eating
 timestamp_in_ms X is sleeping
 timestamp_in_ms X is thinking
 timestamp_in_ms X died
+```
+If the arguments are valid, the program will output the actions of each philosopher until one of them dies or until all of them have eaten `number_of_times_each_philo_must_eat`, if specified.
