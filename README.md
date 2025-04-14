@@ -1,5 +1,5 @@
 # The Dining Philosophers Problem
-The project explores concurrent programming and shared memory synconization with threads and mutexes, processes and semaphores. It's designed around Edsger Dijkstra's famous problem, originally formulated in 1965, that is stated as follows:
+The project explores concurrent programming and shared memory synchronization with threads and mutexes, processes and semaphores. It's designed around Edsger Dijkstra's famous problem, originally formulated in 1965, that is stated as follows:
 
 ```
 X amount of philosophers sit at a round table with bowls of food.
