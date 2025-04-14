@@ -1,21 +1,11 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/11 22:50:44 by cschnath          #+#    #+#              #
-#    Updated: 2025/04/05 15:07:48 by cschnath         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME 		=		libft.a
 CC 			= 		gcc
-CFLAGS 		= 		-Wall -Werror -Wextra
+CFLAGS 		= 		-Wall -Werror -Wextra -I
 INCLUDES 	= 		./include
 SRC_DIR		=   	src
-OBJ_DIR		=  		obj
+OBJ_DIR		=  		obj/
+
+DEF_COLOR		=	\033[0;37m
 
 SRC =   $(SRC_DIR)/ft_isalpha.c \
 		$(SRC_DIR)/ft_isdigit.c \
@@ -68,21 +58,19 @@ SRC =   $(SRC_DIR)/ft_isalpha.c \
 	  	$(SRC_DIR)/ft_lstiter_bonus.c \
 	  	$(SRC_DIR)/ft_lstmap_bonus.c \
 
-OBJ	 =  $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%, $(SRC:.c=.o))
+OBJ = $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%, $(SRC:.c=.o))
 
-all: $(NAME)
+all	  	 : 	$(NAME)
 
-$(NAME): $(OBJ)
+$(NAME)  :	$(OBJ)
 	@ar rcs $(NAME) $(OBJ)
-	@echo "$(NAME) compiled successfully."
+	@echo "$(DEF_COLOR)$(NAME) compiled successfully.$(DEF_COLOR)"
 
-$(OBJ) : $(OBJ_DIR)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-$(OBJ_DIR) :	
+$(OBJ_DIR): 
 	@mkdir -p $(OBJ_DIR)
-
-$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -I$(INCLUDES) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)

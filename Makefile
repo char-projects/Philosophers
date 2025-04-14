@@ -52,18 +52,15 @@ $(NAME)					:	$(OBJ)
 							@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 							@printf "\n$(BOLD_GREEN)[$(NAME)]:\t✅ $(NAME) compiled successfully!$(DEF_COLOR)\n"
 
-$(OBJ)					:	$(OBJ_DIR)
-
-#	Create the object directory if it doesn't exist
-$(OBJ_DIR)				:	
-							@mkdir -p $(OBJ_DIR)
-
-
 ###	Rules for creating compiling .c files into obj
 ##	prod
 $(OBJ_DIR)/%.o			:	$(SRC_DIR)/%.c | $(OBJ_DIR)
 							$(PROGRESS_BAR)
 							@$(CC) $(CFLAGS) -I$(INCLUDES) -c $< -o $@
+
+#	Create the object directory if it doesn't exist
+$(OBJ_DIR)				:	
+							@mkdir -p $(OBJ_DIR)
 
 libft					:	@make -C $(LIBFT)
 
