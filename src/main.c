@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 20:36:33 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:33:11 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	*ft_state(void *tmp_p)
 	t_philos	*p;
 
 	p = (t_philos *)tmp_p;
+	if (p->id % 2 == 0)
+		usleep(100);
 	while (1)
 	{
 		if (!ft_is_dead(p))

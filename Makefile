@@ -1,5 +1,5 @@
 ###	Variables
-NAME					=	philosophers
+NAME					=	philo
 LIBFT 					=	libft
 INCLUDES				=	./include
 MAKEFLAGS				+=	--no-print-directory

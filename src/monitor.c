@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:56:43 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 20:00:36 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:50:51 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	check_death(t_philos *p, t_data *data)
 {
 	pthread_mutex_lock(p->meal_lock);
-	if (p->meals_eaten >= p->data->num_to_eat)
+	if (p->data->num_to_eat != -1 && p->meals_eaten >= p->data->num_to_eat)
 	{
 		pthread_mutex_unlock(p->meal_lock);
 		return (0);
