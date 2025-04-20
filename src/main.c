@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:33:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/15 15:33:11 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:14:08 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	*ft_state(void *tmp_p)
 	return (NULL);
 }
 
-void	start_simulation(t_data *p)
+int	start_simulation(t_data *p)
 {
 	int			i;
 	pthread_t	monitor_thread;
@@ -51,13 +51,13 @@ void	start_simulation(t_data *p)
 	if (!p->thread)
 		error_msg(p, 0);
 	if (pthread_create(&monitor_thread, NULL, monitor, (void *)p))
-		error_msg(p, 4);
+		return (error_msg(p, 4));
 	i = 0;
 	while (i < p->num_philos)
 	{
 		if (pthread_create(&p->thread[i], NULL, ft_state,
 				(void *)&p->philos[i]))
-			error_msg(p, 4);
+			return (error_msg(p, 4));
 		i++;
 	}
 	i = 0;
@@ -67,15 +67,14 @@ void	start_simulation(t_data *p)
 		pthread_join(p->thread[i], NULL);
 		i++;
 	}
+	return (0);
 }
 
 void	only_one_philosopher(t_data *p)
 {
-	msg_lock(&p->philos[0], 0);
+	printf("%zu 1 has taken a fork\n", current_time(1));
 	ft_usleep(p->time_to_die);
-	msg_lock(&p->philos[0], 4);
-	free_philos(p);
-	exit(0);
+	printf("%zu 1 died\n", current_time(1));
 }
 
 int	main(int argc, char **argv)
@@ -85,17 +84,18 @@ int	main(int argc, char **argv)
 	current_time(0);
 	p = malloc(sizeof(t_data));
 	if (!p)
-		error_msg(p, 0);
+		return (error_msg(p, 0));
 	if (argc != 5 && argc != 6)
-		error_msg(p, 1);
+		return (error_msg(p, 1));
 	if (arg_check(argv))
-		error_msg(p, 2);
-	init_argv(argc, argv, p);
-	init_forks(p);
-	init_philos(p);
+		return (error_msg(p, 2));
+	if (init_argv(argc, argv, p) == -1 || init_forks(p) == -1
+		|| init_philos(p) == -1)
+		return (0);
 	distribute_forks(p);
 	if (p->num_philos == 1)
 		only_one_philosopher(p);
-	start_simulation(p);
+	else
+		start_simulation(p);
 	free_philos(p);
 }

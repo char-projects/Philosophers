@@ -1,6 +1,5 @@
 ###	Variables
 NAME					=	philo
-LIBFT 					=	libft
 INCLUDES				=	./include
 MAKEFLAGS				+=	--no-print-directory
 
@@ -27,12 +26,12 @@ OBJ						=	$(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%, $(SRC:.c=.o))
 ###	Compilation/ Linking configs
 CC						=	cc
 CFLAGS					=	-Werror -Wextra -Wall
-LDFLAGS					=	-lreadline -Llibft -lft
+LDFLAGS					=	-lreadline
 RM						=	rm -rf
 COUNT					:=	0
 
 ###	Color Schemes
-DEF_COLOR		=	\033[0;37m # Light gray
+DEF_COLOR		=	\033[0;37m
 BOLD_GREEN		=	\033[1;32m
 ORANGE			=	\033[0;33m
 VIVID_BLUE		=	\033[1;34m
@@ -47,7 +46,6 @@ all						:	$(NAME)
 $(NAME)					:	$(OBJ) 
 							@printf "\n"
 							@printf "\n$(DEF_COLOR)🔄 Compiling dependencies...$(DEF_COLOR)\n"
-							@make -C $(LIBFT) 
 							@printf "\n$(DEF_COLOR)✅ Dependencies fulfilled.$(DEF_COLOR)\n"
 							@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 							@printf "\n$(BOLD_GREEN)[$(NAME)]:\t✅ $(NAME) compiled successfully!$(DEF_COLOR)\n"
@@ -62,16 +60,12 @@ $(OBJ_DIR)/%.o			:	$(SRC_DIR)/%.c | $(OBJ_DIR)
 $(OBJ_DIR)				:	
 							@mkdir -p $(OBJ_DIR)
 
-libft					:	@make -C $(LIBFT)
-
 clean					:
 							@$(RM) $(OBJ_DIR) $(TEST_OBJ_DIR)
-							@make clean -C $(LIBFT)
 							@echo "$(VIVID_BLUE)[$(NAME)]:\t🔥 Object files cleaned.$(DEF_COLOR)"
 
 fclean					:	clean
 							@$(RM) $(NAME) $(TEST_EXEC)
-							@$(RM) $(LIBFT)/libft.a
 							@echo "$(MAGENTA)[$(NAME)]:\t🔥 All executable files cleaned.$(DEF_COLOR)"
 
 re						:	fclean all

@@ -6,16 +6,16 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:29:46 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 20:35:24 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:18:13 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	init_argv(int argc, char **argv, t_data *p)
+int	init_argv(int argc, char **argv, t_data *p)
 {
-	int	i;
-	int	num;
+	int		i;
+	size_t	num;
 
 	i = 0;
 	num = 0;
@@ -23,11 +23,11 @@ void	init_argv(int argc, char **argv, t_data *p)
 	{
 		num = ft_atoi(argv[i]);
 		if (i == 1 && (num < 1 || num > 200))
-			error_msg(p, 2);
-		else if (i == 5 && (num < 0 || num > INT_MAX))
-			error_msg(p, 2);
+			return (error_msg(p, 2));
+		else if (i == 5 && ((int)num < 0 || num > INT_MAX))
+			return (error_msg(p, 2));
 		else if (i != 1 && i != 5 && (num < 1 || num > INT_MAX))
-			error_msg(p, 2);
+			return (error_msg(p, 2));
 	}
 	p->num_philos = ft_atoi(argv[1]);
 	p->time_to_die = ft_atoi(argv[2]);
@@ -37,31 +37,33 @@ void	init_argv(int argc, char **argv, t_data *p)
 		p->num_to_eat = ft_atoi(argv[5]);
 	else
 		p->num_to_eat = -1;
+	return (0);
 }
 
-void	init_forks(t_data *p)
+int	init_forks(t_data *p)
 {
 	int	i;
 
 	p->forks = malloc(sizeof(pthread_mutex_t) * p->num_philos);
 	if (!p->forks)
-		error_msg(p, 0);
+		return (error_msg(p, 0));
 	i = 0;
 	while (i < p->num_philos)
 	{
 		pthread_mutex_init(&p->forks[i], NULL);
 		i++;
 	}
+	return (0);
 }
 
-void	init_philos(t_data *p)
+int	init_philos(t_data *p)
 {
 	int	i;
 
 	i = 0;
 	p->philos = malloc(sizeof(t_philos) * p->num_philos);
 	if (!p->philos)
-		error_msg(p, 0);
+		return (error_msg(p, 0));
 	while (i < p->num_philos)
 	{
 		p->philos[i].id = i + 1;
@@ -74,12 +76,13 @@ void	init_philos(t_data *p)
 		p->philos[i].write_lock = malloc(sizeof(pthread_mutex_t));
 		if (!p->philos[i].meal_lock || !p->philos[i].dead_lock
 			|| !p->philos[i].write_lock)
-			error_msg(p, 0);
+			return (error_msg(p, 0));
 		pthread_mutex_init(p->philos[i].meal_lock, NULL);
 		pthread_mutex_init(p->philos[i].dead_lock, NULL);
 		pthread_mutex_init(p->philos[i].write_lock, NULL);
 		i++;
 	}
+	return (0);
 }
 
 void	distribute_forks(t_data *p)

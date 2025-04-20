@@ -6,34 +6,11 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 01:03:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/10 20:34:27 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/20 17:50:12 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
-
-void	msg_lock(t_philos *p, int code)
-{
-	char	*str;
-
-	if (code == 0)
-		str = "has taken a fork";
-	else if (code == 1)
-		str = "is eating";
-	else if (code == 2)
-		str = "is sleeping";
-	else if (code == 3)
-		str = "is thinking";
-	else if (code == 4)
-		str = "died";
-	else if (code == 5)
-		str = "is dead in main";
-	else
-		return ;
-	pthread_mutex_lock(p->write_lock);
-	printf("%zu %d %s\n", current_time(1), p->id, str);
-	pthread_mutex_unlock(p->write_lock);
-}
 
 void	ft_usleep(size_t ms)
 {
@@ -109,4 +86,28 @@ int	arg_check(char **argv)
 		i++;
 	}
 	return (0);
+}
+
+int	ft_atoi(const char *nptr)
+{
+	long	res;
+	long	sign;
+
+	res = 0;
+	sign = 1;
+	while (*nptr == ' ' || *nptr == '\f' || *nptr == '\n'
+		|| *nptr == '\r' || *nptr == '\t' || *nptr == '\v')
+		nptr++;
+	if (*nptr == '-')
+		sign = -1;
+	if (*nptr == '-' || *nptr == '+')
+		nptr++;
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		if (res < -2147483648)
+			res = 2147483648;
+		res = res * 10 + (*nptr - '0');
+		nptr++;
+	}
+	return ((int)res * (int)sign);
 }
