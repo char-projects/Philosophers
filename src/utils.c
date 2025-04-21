@@ -6,7 +6,7 @@
 /*   By: cschnath <cschnath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 01:03:48 by cschnath          #+#    #+#             */
-/*   Updated: 2025/04/20 17:50:12 by cschnath         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:34:29 by cschnath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	arg_check(char **argv)
 		j = 0;
 		while (argv[i][j])
 		{
-			if (argv[i][j] < '0' || argv[i][j] > '9')
+			if (argv[i][j] < '0' || argv[i][j] > '9' || j > 11)
 				return (1);
 			j++;
 		}
@@ -95,8 +95,8 @@ int	ft_atoi(const char *nptr)
 
 	res = 0;
 	sign = 1;
-	while (*nptr == ' ' || *nptr == '\f' || *nptr == '\n'
-		|| *nptr == '\r' || *nptr == '\t' || *nptr == '\v')
+	while (*nptr == ' ' || *nptr == '\f' || *nptr == '\n' || *nptr == '\r'
+		|| *nptr == '\t' || *nptr == '\v')
 		nptr++;
 	if (*nptr == '-')
 		sign = -1;
